@@ -1,0 +1,16 @@
+[tool.bump-my-version]
+current_version = "1.0.0"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+serialize = ["{major}.{minor}.{patch}"]
+commit = true
+tag = true
+
+[[tool.bump-my-version.files]]
+filename = "collection.yaml"
+search = "version: {current_version}"
+replace = "version: {new_version}"
+
+[[tool.bump-my-version.files]]
+filename = "readme.md"
+search = "Version: {current_version}"
+replace = "Version: {new_version}"

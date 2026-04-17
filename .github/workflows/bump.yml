@@ -1,0 +1,30 @@
+name: Auto Version Bump
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'aliases/**'
+      - 'snippets/**'
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Increment Version
+        run: |
+          VERSION=$(grep 'version:' collection.yaml | awk '{print $2}')
+          BASE=$(echo $VERSION | cut -d. -f1-2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="$BASE.$NEW_PATCH"
+          sed -i "s/version: $VERSION/version: $NEW_VERSION/" collection.yaml
+          sed -i "s/Version: $VERSION/Version: $NEW_VERSION/" readme.md
+          git config --global user.name "WorkshopBot"
+          git config --global user.email "bot@github.com"
+          git add collection.yaml readme.md
+          git commit -m "chore: auto-bump version to $NEW_VERSION"
+          git push
