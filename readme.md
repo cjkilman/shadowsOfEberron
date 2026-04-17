@@ -10,7 +10,7 @@ Dev: CJ Kilman (Gerolkae)
 |-- readme.md
 |-- /snippets/
 |   |-- emberbrand.py
-|   |-- mark_manager.py
+|   |-- silverveil.py
 |-- /counters/
 |   |-- powermarks.txt
 
