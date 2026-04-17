@@ -1,10 +1,13 @@
 name: Shadows of Eberron
-description: Automation for Crescent Kingdom Marks.
+description: Core automation for the Crescent Kingdom campaign.
+author: CJ Kilman
+version: 1.0.2
 folders:
-  - snippets
   - aliases
+  - snippets
 alias_map:
   powermark: aliases/powermark.py
 snippet_map:
   emberbrand: snippets/emberbrand.py
   silverveil: snippets/silverveil.py
+
