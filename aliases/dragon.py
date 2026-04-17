@@ -9,12 +9,11 @@ is_out = "-fail" in args or "-auto" in args
 active_module = "bite" 
 if args:
     input_mode = args[0].lower()
-    valid_modes = ["bite", "railgun", "flamethrower", "flame", "rail", "soarsled", "wings", "recharge", "sync"]
+    valid_modes = ["bite", "railgun", "flamethrower", "flame", "rail", "soarsled", "wings", "recharge", "sync", "sentry", "aegis", "camp"]
     if input_mode in valid_modes:
         active_module = input_mode
 
 # 2. THE OVERCLOCK & PROPHECY LOGIC
-# This siphons Gero's Mark of Power into the Dragon's capacitors.
 overclock_active = False
 pwr_msg = ""
 if "-power" in args:
@@ -22,8 +21,6 @@ if "-power" in args:
         ch.mod_cc(ember_cc, -1)
         overclock_active = True
         pwr_msg = f'\n\n**[FERNIAN OVERCLOCK]** {ember_cc} consumed! +{pb} DMG.'
-        
-        # 25% Chance for the Docent to output a Prophecy Fragment while overclocked
         if vroll("1d100").total > 75:
             frags = [
                 "The Crescent shall rise when the Flame meets the Metal.",
@@ -52,7 +49,6 @@ if is_out:
     return f'embed -title "{title}" -desc "*{desc}*{pwr_msg}" {fields} -color 00ff00'
 
 # 4. WEAPON & UTILITY MODULES
-# Damage rolls now include (+pb) if Overclocked
 if active_module == "bite":
     title = "Mechanical Dragon: Force-Bite"
     desc = "The construct's jaws hum with kinetic energy."
@@ -94,6 +90,15 @@ elif active_module in ["recharge", "sync"]:
     else:
         ch.mod_cc(cc, 1); title, desc = "Atmospheric Osmosis", "Catching planar currents."
     fields = f'-f "Battery|{ch.get_cc(cc)}/5"'
+
+elif active_module in ["sentry", "aegis", "camp"]:
+    cc = "Planar Battery"
+    if ch.get_cc(cc) >= 2:
+        ch.mod_cc(cc, -2)
+        title, desc = "Mechanical Dragon: Aegis Perimeter", "The wings unfold into a wide, shimmering canopy filtering the Mournland mists."
+        fields = f'-f "Perimeter|30ft Safe Zone" -f "Security|Advantage on Perception" -f "Battery|{ch.get_cc(cc)}/5"'
+    else:
+        return 'echo "PLANAR SYNC FAILURE: Insufficient battery!"'
 
 return f'embed -title "{title}" -desc "{desc}{pwr_msg}" {fields}'
 </drac2>
