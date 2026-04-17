@@ -6,8 +6,10 @@ Dev: CJ Kilman (Gerolkae)
 
 [FILE STRUCTURE]
 /shadows-of-eberron
-|-- fleet.alias
+|-- collection.yaml
 |-- readme.md
+|-- /aliases/
+|   |-- powermark.py
 |-- /snippets/
 |   |-- emberbrand.py
 |   |-- silverveil.py
