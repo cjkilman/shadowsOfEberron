@@ -1,4 +1,3 @@
-!servalias powermark <drac2>
 ch = character()
 input_args = """&*&"""
 args = input_args.split()
@@ -22,4 +21,3 @@ if not ch.cc_exists(cc_name) or ch.get_cc(cc_name) < 1:
 ch.mod_cc(cc_name, -1)
 my_roll = vroll(dice)
 return f'embed -title "{cc_name} Activates!" -desc "{flare_text}" -f "Effect|{my_roll.full} {dmg_type}" -f "Charges Remaining|{ch.get_cc(cc_name)}"'
-</drac2>
