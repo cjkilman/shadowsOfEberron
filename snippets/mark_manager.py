@@ -1,4 +1,4 @@
-<drac2>
+!servalias powermark <drac2>
 ch = character()
 input_args = """&*&"""
 args = input_args.split()
