@@ -9,7 +9,7 @@ Dev: CJ Kilman (Gerolkae)
 |-- fleet.alias
 |-- readme.md
 |-- /snippets/
-|   |-- ember_snippet.py
+|   |-- emberbrand.py
 |   |-- mark_manager.py
 |-- /counters/
 |   |-- powermarks.txt

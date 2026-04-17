@@ -1,0 +1,10 @@
+name: Shadows of Eberron
+description: Automation for Crescent Kingdom Marks.
+folders:
+  - snippets
+  - aliases
+alias_map:
+  powermark: aliases/powermark.py
+snippet_map:
+  emberbrand: snippets/emberbrand.py
+  silverveil: snippets/silverveil.py
