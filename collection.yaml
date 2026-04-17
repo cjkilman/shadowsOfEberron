@@ -10,4 +10,5 @@ alias_map:
 snippet_map:
   emberbrand: snippets/emberbrand.py
   silverveil: snippets/silverveil.py
+  dragon: aliases/dragon.py
 
