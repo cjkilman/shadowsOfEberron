@@ -1,0 +1,67 @@
+
+
+!cc create "Emberbrand" -max 4 -min 0 -type bubble -reset long
+!cc create "Silver Veil" -max 4 -min 0 -type bubble -reset long -desc "Manipulating the weave to blur reality."
+
+
+
+
+
+
+#Server Aliases
+
+!servalias powermark <drac2>
+ch = character()
+input_args = """&*&"""
+args = input_args.split()
+if not args:
+    return 'echo "You need to specify a mark! Usage: !powermark <ember/silver>"'
+mark_type = args[0].lower()
+if mark_type == "ember":
+    cc_name = "Emberbrand"
+    dice = "1d6"
+    dmg_type = "[fire]"
+    flare_text = "Elemental fire surges through the strike."
+    cc_desc = "Channeling elemental fire into the strike."
+elif mark_type == "silver":
+    cc_name = "Silver Veil"
+    dice = "1d4"
+    dmg_type = "[veil]"
+    flare_text = "Gerolkae fades into the background noise."
+    cc_desc = "Manipulating the weave to blur reality."
+else:
+    return f'echo "Unknown mark: {mark_type}"'
+
+# The Lazy Init: If it doesn't exist, build it right now.
+if not ch.cc_exists(cc_name):
+    ch.create_cc(name=cc_name, minVal=0, maxVal=4, reset="long", dispType="bubble", desc=cc_desc, initial_value=4)
+
+# Safety Check: It exists now, but is it empty?
+if ch.get_cc(cc_name) < 1:
+    return f'echo "Error: {cc_name} Failed! Out of charges."'
+
+ch.mod_cc(cc_name, -1)
+my_roll = vroll(dice)
+return f'embed -title "{cc_name} Activates!" -desc "{flare_text}" -f "Effect|{my_roll.full} {dmg_type}" -f "Charges Remaining|{ch.get_cc(cc_name)}"'
+</drac2>
+
+!servalias installmark <drac2>
+ch = character()
+args = "&*&".split()
+if not args: return 'echo "Usage: !installmark <ember/silver>"'
+
+mark = args[0].lower()
+if mark == "ember":
+    ch.create_cc(name="Emberbrand", minVal=0, maxVal=4, reset="long", dispType="bubble", desc="Elemental fire.", initial_value=4)
+    return 'echo "Emberbrand database installed successfully!"'
+elif mark == "silver":
+    ch.create_cc(name="Silver Veil", minVal=0, maxVal=4, reset="long", dispType="bubble", desc="Illusion weave.", initial_value=4)
+    return 'echo "Silver Veil database installed successfully!"'
+else:
+    return 'echo "Unknown mark."'
+</drac2>
+
+
+##Server Snippets
+
+!servsnippet emberbrand <drac2> [PASTE CODE HERE] </drac2>
