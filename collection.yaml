@@ -9,9 +9,9 @@ alias_map:
   powermark: aliases/powermark.py
   dragon: aliases/dragon.py
   camp: aliases/camp.py
+  strike: aliases/heirloom.py
 snippet_map:
   emberbrand: snippets/emberbrand.py
   silverveil: snippets/silverveil.py
-  wrench: aliases/wrench.py
 
 
