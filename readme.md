@@ -30,7 +30,7 @@ Emberbrand     | 4   | Long  | Elemental Fire Flare (1d6)
 Silver Veil    | 4   | Long  | Illusion/Stealth mechanics (1d4)
 Dragon Ammo    | 10  | Long  | Scrap-metal slugs for the Railgun module.
 Fuel Tank      | 3   | Long  | Pressurized Fernian essence for the Flamethrower.
-Planar Battery | 3   | Long  | Power for Soarsled wings and high-mobility flight.
+Planar Battery | 5   | Long  | Power for Soarsled wings and high-mobility flight.
 
 [ENVIRONMENT]
 Line Endings: LF (Crucial for Avrae/Discord compatibility)
