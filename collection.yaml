@@ -7,7 +7,7 @@ folders:
   - snippets
 alias_map:
   powermark: aliases/powermark.py
-  dragon: aliases/dragon.py
+  defender: aliases/defender.py
   camp: aliases/camp.py
   strike: aliases/heirloom.py
 snippet_map:
