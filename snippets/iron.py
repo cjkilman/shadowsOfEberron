@@ -1,10 +1,20 @@
 <drac2>
-ch, cc = character(), "Iron Howl"
+ch = character()
+cc = "Iron Howl"
+dmg = "1d8[slashing]"
+flavor = "A primal ferocity heightens the strike."
+
+# 1. Dependency Check: The Mark MUST be equipped via !powermark
 if not ch.cc_exists(cc):
-    ch.create_cc(cc, 0, 4, "long", "bubble", None, None, 4)
-    ch.set_cc(cc, 4) # Forces it to full on creation
+    return f'-f "System Error|You are not attuned to {cc}. Run your attunement command first!" '
+
+# 2. Guard Clause: Check for charges
 if ch.get_cc(cc) < 1:
-    return f'-f "{cc}|Depleted! Reset on a Long Rest."'
+    return f'-f "{cc} Error|Out of power! Reset on a Long Rest." '
+
+# 3. Execution: Spend charge and output mechanics
 ch.mod_cc(cc, -1)
-return f'-d "1d8[slashing]" -f "{cc}|A primal ferocity heightens the strike! ({ch.get_cc(cc)} left)"'
+rem = ch.get_cc(cc)
+
+return f'-d "{dmg}" -f "{cc} Activated|{flavor}\n*Charges remaining: {rem}/4*" '
 </drac2>

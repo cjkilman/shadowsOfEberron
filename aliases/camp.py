@@ -7,10 +7,13 @@ args = "&*&".split()
 ch.long_rest()
 
 # 2. Custom Counter Resets
-# We loop through your 'Foundry' counters to ensure they match the repo registry
+# Updated to include EVERY mark from your registry
 counters = {
     "Emberbrand": 4,
     "Silver Veil": 4,
+    "Iron Howl": 4,     # The "Last" one I keep dropping
+    "Starweave": 4,
+    "Earthheart": 4,
     "Dragon Ammo": 10,
     "Fuel Tank": 3,
     "Planar Battery": 5

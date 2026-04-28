@@ -1,19 +1,20 @@
 <drac2>
 ch = character()
 cc = "Emberbrand"
+dmg = "1d6[fire]"
+flavor = "Elemental fire surges from the mark!"
 
-# 1. Self-Healing: Auto-create counter if missing
+# 1. Dependency Check: The Mark MUST be equipped via !powermark
 if not ch.cc_exists(cc):
-    ch.create_cc(cc, 0, 4, "long", "bubble")
-    ch.set_cc(cc, 4)  # <--- This ensures it's full the moment it's born
+    return f'-f "System Error|You are not attuned to {cc}. Run your attunement command first!" '
 
 # 2. Guard Clause: Check for charges
 if ch.get_cc(cc) < 1:
-    return f'-f "{cc} Error|Out of elemental fuel! Reset on a Long Rest."'
+    return f'-f "{cc} Error|Out of power! Reset on a Long Rest." '
 
-# 3. Execution: Spend charge and roll damage
+# 3. Execution: Spend charge and output mechanics
 ch.mod_cc(cc, -1)
 rem = ch.get_cc(cc)
 
-return f'-d "1d6[fire]" -f "{cc} Flare|Elemental fire surges from the mark! Charges left: {rem}"'
+return f'-d "{dmg}" -f "{cc} Activated|{flavor}\n*Charges remaining: {rem}/4*" '
 </drac2>
