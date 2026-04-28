@@ -1,12 +1,11 @@
 <drac2>
 ch = character()
-# The &*& tells the website to grab whatever the player types after !powermark
 args = "&*&".split()
 char_name = ch.name
 
 # 1. Basic Usage Check
 if not args:
-    return f'echo Usage: !powermark <ember/silver> [dice]'
+    return f'echo Usage: !powermark <ember/silver/iron/star/earth> [dice]'
 
 mark_type = args[0].lower()
 
@@ -19,13 +18,27 @@ if mark_type == "ember":
 elif mark_type == "silver":
     cc_name = "Silver Veil"
     dice = "1d4"
-    dmg_type = "[veil]"
-    flare_text = "Gerolkae fades into the background noise."
+    dmg_type = "[psychic]"
+    flare_text = f"{char_name} fades into the background noise."
+elif mark_type == "iron":
+    cc_name = "Iron Howl"
+    dice = "1d8"
+    dmg_type = "[slashing]"
+    flare_text = "A primal ferocity heightens the strike."
+elif mark_type == "star":
+    cc_name = "Starweave"
+    dice = "1d6"
+    dmg_type = "[force]"
+    flare_text = "The strike resonates with planar energy."
+elif mark_type == "earth":
+    cc_name = "Earthheart"
+    dice = "1d4"
+    dmg_type = "[force]"
+    flare_text = "The ground yields to your immovable will."
 else:
-    return f'echo Unknown mark: {mark_type}. Use "ember" or "silver".'
+    return f'echo Unknown mark: {mark_type}. Use ember, silver, iron, star, or earth.'
 
 # 3. The Self-Healing Counter Logic
-# (name, min, max, reset, type, display, value, initial)
 init_msg = ""
 if not ch.cc_exists(cc_name):
     ch.create_cc(cc_name, 0, 4, "long", "bubble", None, None, 4)

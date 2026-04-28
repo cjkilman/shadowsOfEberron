@@ -1,43 +1,55 @@
 <drac2>
+# 1. CONTEXT
 ch = character()
 c = combat()
-p = argparse(&ARGS&)
-input_mode = &ARGS&[0].lower() if &ARGS& else "bite"
+args = &ARGS&
+p = argparse(args)
+m = args[0].lower() if args else "bite"
 
-# 1. FIND THE ATTACK OBJECT
-# Avrae maps the GSheet "Attack Name" to a list of attack objects.
-atk = ([a for a in ch.attacks if input_mode in a.name.lower() and "[def]" in a.name.lower()] + [None])[0]
+# 2. DATA SYNC (TRUST THE SHEET)
+# This finds the attack object created by your GSheet formulas
+atk = ([a for a in ch.attacks if m in a.name.lower()] + [None])[0]
 
-if not atk:
-    return f'echo "No module \'{input_mode} [Def]\' found on sheet."'
+# 3. HIT & DAMAGE STRINGS
+# If sheet is found, use its values. Otherwise, use 12 Int (+1) + 5th Level (+3)
+h_bonus = atk.bonus if atk else (intelligenceMod + proficiencyBonus)
+d_expr = atk.damage if atk else (f"2d10 + {intelligenceMod}" if "rail" in m else f"1d8 + {proficiencyBonus}")
 
-# 2. THE VERIFIED DATA EXTRACTION
-# Avrae dumps GSheet "Notes" into atk.description
-import re
-raw_notes = atk.description.lower() if atk.description else ""
+# 4. ROLLS (With Crit Handling)
+h_roll = vroll(f"1d20 + {h_bonus}")
+# Automatically doubles dice if the d20 is a 20
+d_roll = vroll(d_expr, crit=(h_roll.result.crit == 1))
 
-# Search for "hp: ##" and "ac: ##" within that text block
-hp_search = re.search(r'hp:\s*(\d+)', raw_notes)
-ac_search = re.search(r'ac:\s*(\d+)', raw_notes)
+# 5. MECHANICAL TARGETING (-t)
+targets = p.get("t")
+fields, damage_cmds = "", []
 
-# Assign variables: Use the found number, or fall back to defaults
-def_hp = int(hp_search.group(1)) if hp_search else 24
-def_ac = int(ac_search.group(1)) if ac_search else 17
+if c and targets:
+    for t_name in targets:
+        t = c.get_combatant(t_name)
+        if t:
+            # Check against target AC
+            if h_roll.total >= t.ac or h_roll.result.crit == 1:
+                # Generates the actual command to reduce HP
+                damage_cmds.append(f'!i hp "{t.name}" -{d_roll.total}')
+                fields += f' -f "{t.name} (Hit)|HP -{d_roll.total} (AC {t.ac})"'
+            else:
+                fields += f' -f "{t.name} (Miss)|AC {t.ac}"'
 
-# 3. INITIATIVE SYNC & INJECTION
-pet_name = p.get("name")[0] if p.get("name") else f"{ch.name}'s Defender"
-pet = c.get_combatant(pet_name) if c else None
+# 6. ASSEMBLY
+out = ["multiline"]
+pet_name = f"{ch.name}'s Defender"
 
-if c and not pet:
-    # Use the character's current initiative to place the pet
-    my_init = c.me.init if c.me else 0
-    pet = c.add_combatant(pet_name, init=my_init, hp=def_hp, ac=def_ac)
-    status = f'-f "System|{pet_name} deployed (HP: {def_hp}, AC: {def_ac}) at Init {my_init}."'
-else:
-    status = ""
+# Auto-deploy pet to initiative if missing
+if c and not c.get_combatant(pet_name):
+    out.append(f'!i add {c.me.init if c.me else 0} "{pet_name}" -hp 24 -ac 17')
 
-# 4. EXECUTE THE ATTACK
-res = atk.roll()
-# ... (standard targeting logic) ...
-return f'embed -title "{pet_name}: {atk.name.replace("[Def]","")}" -f "Result|{res.attack.full}" -f "Damage|{res.damage.full}" {status} -color 00ff00'
+# Result Embed
+out.append(f'!embed -title "{pet_name}: {m.title()}" -f "Result|{h_roll}" -f "Damage|{d_roll}" {fields} -color 00ff00')
+
+# Execute HP reduction commands
+if damage_cmds:
+    out.extend(damage_cmds)
+
+return "\n".join(out)
 </drac2>
