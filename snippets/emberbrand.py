@@ -4,8 +4,8 @@ cc = "Emberbrand"
 
 # 1. Self-Healing: Auto-create counter if missing
 if not ch.cc_exists(cc):
-    # Standard: 4 charges, resets on Long Rest
     ch.create_cc(cc, 0, 4, "long", "bubble")
+    ch.set_cc(cc, 4)  # <--- This ensures it's full the moment it's born
 
 # 2. Guard Clause: Check for charges
 if ch.get_cc(cc) < 1:

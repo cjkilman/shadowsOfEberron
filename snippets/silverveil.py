@@ -4,8 +4,8 @@ cc = "Silver Veil"
 
 # Self-healing: Create the counter if it doesn't exist
 if not ch.cc_exists(cc):
-    # Sets a default of 4 charges, resetting on a Long Rest
     ch.create_cc(cc, 0, 4, "long", "bubble")
+    ch.set_cc(cc, 4) # Ensures the first-ever use doesn't start at 3/4 or 0/4
 
 # Charge check
 if ch.get_cc(cc) < 1:
